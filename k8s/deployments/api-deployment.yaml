@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: crud-api
+  name: api
 spec:
   replicas: 3 # Scaling for High Availability
   selector:
     matchLabels:
-      app: crud-api
+      app: api
   template:
     metadata:
       labels:
