@@ -1,0 +1,21 @@
+# Python artifacts
+**/__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Environments
+.env
+.venv
+env/
+venv/
+pip-log.txt
+
+# Local IDEs
+.vscode/
+.idea/
+
+# Project specific
+k8s/
+*.parquet
+*.db
