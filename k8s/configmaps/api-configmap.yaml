@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-config
+data:
+  # Note: The hostname matches the name of the postgres service
+  DATABASE_URL: "postgresql://admin_user:password123@postgres-service:5432/sales_db"

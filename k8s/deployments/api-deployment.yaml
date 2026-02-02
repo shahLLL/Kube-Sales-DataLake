@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crud-api
+spec:
+  replicas: 3 # Scaling for High Availability
+  selector:
+    matchLabels:
+      app: crud-api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+      - name: api
+        image: car-sales-api:v1
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: api-config
+        # Health checks ensure the API is only routed traffic when the DB is ready
+        readinessProbe:
+          httpGet:
+            path: /sales
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
