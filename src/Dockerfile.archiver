@@ -6,23 +6,25 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONPATH=/app
 
-# System dependencies for data science libraries
+# 1. Install system dependencies
 RUN apt-get update && apt-get install -y \
     libpq-dev \
     gcc \
     g++ \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements
-COPY shared/requirements-base.txt ./shared-reqs.txt
-COPY archiver/requirements.txt ./archiver-reqs.txt
+# 2. Setup directory structure for requirements
+RUN mkdir -p shared archiver
 
-# Install dependencies (Pandas/PyArrow are installed here)
-RUN pip install --no-cache-dir -r archiver-reqs.txt
+COPY shared/requirements-base.txt ./shared/requirements-base.txt
+COPY archiver/requirements.txt ./archiver/requirements.txt
 
-# Copy shared logic and the archiver script
+# 3. Install dependencies
+RUN pip install --no-cache-dir -r archiver/requirements.txt
+
+# 4. Copy source code 
 COPY shared/ ./shared/
 COPY archiver/ ./archiver/
 
-# Execute and exit
+# Execute
 CMD ["python", "archiver/main.py"]
