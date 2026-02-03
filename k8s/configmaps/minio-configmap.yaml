@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: minio-setup-script
+data:
+  setup.sh: |
+    #!/bin/sh
+    # Wait for MinIO server to be ready
+    until curl -s http://localhost:9000/minio/health/live; do
+      echo "Waiting for MinIO server..."
+      sleep 2
+    done
+
+    # Configure the 'mc' client to point to the local server
+    mc alias set myminio http://localhost:9000 minioadmin minioadmin
+
+    # Create the bucket defined in the project manifest
+    if mc ls myminio/sales-data-lake > /dev/null 2>&1; then
+      echo "Bucket 'sales-data-lake' already exists."
+    else
+      mc mb myminio/sales-data-lake
+      echo "Bucket 'sales-data-lake' created successfully."
+    fi
