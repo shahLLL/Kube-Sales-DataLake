@@ -9,13 +9,23 @@ spec:
       - name: psql-client
         image: postgres:15-alpine
         env:
+          # 1. Decoupled Password from the Secret
           - name: PGPASSWORD
-            value: "password123" # Must match your postgres-config password
+            valueFrom:
+              secretKeyRef:
+                name: postgres-secret
+                key: POSTGRES_PASSWORD
         command: 
           - /bin/sh
           - -c
           - |
-            # We use the internal service name to reach the StatefulSet
+            # 2. Added a wait-loop to ensure Postgres is actually up
+            echo "Waiting for postgres-service..."
+            until pg_isready -h postgres-service -U admin_user; do
+              sleep 2
+            done
+
+            echo "Applying schema..."
             psql -h postgres-service -U admin_user -d sales_db -f /scripts/schema.sql
         volumeMounts:
         - name: schema-vol
