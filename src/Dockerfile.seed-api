@@ -1,0 +1,23 @@
+FROM python:3.11-slim
+
+# Prevent Python from writing .pyc files and enable unbuffered logging
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+# Install system dependencies for postgres (psycopg2)
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy the shared and seed-data folders
+COPY shared/ /app/shared/
+COPY seed-data/ /app/seed-data/
+
+# Install dependencies using the seed-data requirements
+RUN pip install --no-cache-dir -r /app/seed-data/requirements.txt
+
+# 3. Entry point
+CMD ["python", "seed-data/main.py"]
