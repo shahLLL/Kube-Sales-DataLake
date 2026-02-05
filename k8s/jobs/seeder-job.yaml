@@ -9,8 +9,8 @@ spec:
     spec:
       containers:
       - name: seeder
-        image: car-sales-seeder:local
-        imagePullPolicy: Never
+        image: shahlll/car-sales-seeder
+        imagePullPolicy: Always
         resources:
           requests:
             memory: "64Mi"

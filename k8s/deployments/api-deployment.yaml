@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
       - name: api
-        image: car-sales-api:v1
-        imagePullPolicy: Never
+        image: shahlll/car-sales-api
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         envFrom:

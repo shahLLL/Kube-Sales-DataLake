@@ -11,8 +11,8 @@ spec:
         spec:
           containers:
           - name: archiver
-            image: car-sales-archiver:local
-            imagePullPolicy: Never
+            image: shahlll/car-sales-archiver
+            imagePullPolicy: Always
             envFrom:
             - configMapRef:
                 name: archiver-config
