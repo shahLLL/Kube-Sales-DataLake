@@ -3,6 +3,7 @@
   <img src="images/background-image.jpg" alt="Background Image" width="75%"/>
   <br><br>
 </div>
+
 This is a Car Sales DataLake implemented using **Python** and **Kubernetes**. This repository includes
 both the Kubernetes Infrastructure and Python Source Code for this project.
 
