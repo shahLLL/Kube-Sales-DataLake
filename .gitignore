@@ -207,3 +207,4 @@ marimo/_lsp/
 __marimo__/
 
 k8s/secrets
+.DS_Store
