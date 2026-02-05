@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker
 
 # Import shared utilities and models
 from shared.database import wait_for_db
-from shared.models import CarSale
+from shared.models import CarSaleORM
 
 # --- Configuration ---
 # Fetching from environment variables as per project standards
@@ -35,12 +35,15 @@ def archive_stale_records():
     
     try:
         # 1. Identify "old" records based on created_at schema
-        query = session.query(CarSale).filter(CarSale.created_at < cutoff_date)
+        query = session.query(CarSaleORM).filter(CarSaleORM.created_at < cutoff_date)
         df = pd.read_sql(query.statement, engine)
 
         if df.empty:
             print("No stale records found. The Janitor's work is done for now.")
             return
+        else:
+            if 'id' in df.columns:
+                df['id'] = df['id'].astype(str)
 
         # 2. Convert to Parquet via in-memory buffer (using PyArrow engine)
         parquet_buffer = io.BytesIO()
@@ -64,9 +67,9 @@ def archive_stale_records():
         print(f"Successfully archived {len(df)} records to {file_name}")
 
         # 4. Delete archived records from Postgres to free up space
-        ids_to_delete = df['uuid'].tolist()
+        ids_to_delete = df['id'].tolist()
         session.execute(
-            delete(CarSale).where(CarSale.uuid.in_(ids_to_delete))
+            delete(CarSaleORM).where(CarSaleORM.id.in_(ids_to_delete))
         )
         session.commit()
         print(f"Deleted {len(df)} stale records from the primary database.")
