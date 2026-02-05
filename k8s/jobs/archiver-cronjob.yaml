@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: car-sales-archiver
+spec:
+  schedule: "0 0 * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: archiver
+            image: car-sales-archiver:local
+            imagePullPolicy: Never
+            envFrom:
+            - configMapRef:
+                name: archiver-config
+            env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef: { name: postgres-secret, key: DATABASE_URL }
+            - name: S3_ACCESS_KEY
+              valueFrom:
+                secretKeyRef: { name: minio-secret, key: S3_ACCESS_KEY }
+            - name: S3_SECRET_KEY
+              valueFrom:
+                secretKeyRef: { name: minio-secret, key: S3_SECRET_KEY }
+          restartPolicy: OnFailure
