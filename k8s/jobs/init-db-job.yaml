@@ -9,7 +9,6 @@ spec:
       - name: psql-client
         image: postgres:15-alpine
         env:
-          # 1. Decoupled Password from the Secret
           - name: PGPASSWORD
             valueFrom:
               secretKeyRef:

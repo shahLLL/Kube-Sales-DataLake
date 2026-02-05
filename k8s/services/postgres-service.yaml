@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: postgres-service
 spec:
-  clusterIP: None # "Headless" service, standard for StatefulSets
+  clusterIP: None
   selector:
     app: postgres
   ports:
