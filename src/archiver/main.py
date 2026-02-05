@@ -17,19 +17,21 @@ DB_URL = os.environ.get("DATABASE_URL")
 S3_ENDPOINT = os.environ.get("S3_ENDPOINT")
 S3_KEY = os.environ.get("S3_ACCESS_KEY")
 S3_SECRET = os.environ.get("S3_SECRET_KEY")
-BUCKET_NAME = "sales-data-lake"
+BUCKET_NAME = os.environ.get("BUCKET_NAME")
+RETENTION_DAYS = int(os.environ.get("RETENTION_DAYS"))
 
 # --- Initialization ---
 engine = create_engine(DB_URL)
 Session = sessionmaker(bind=engine)
 
-def archive_stale_records(days_threshold=730):
+
+def archive_stale_records():
     """
     Identifies records older than the threshold, converts them to Parquet,
     uploads to MinIO, and removes them from Postgres.
     """
     session = Session()
-    cutoff_date = datetime.now() - timedelta(days=days_threshold)
+    cutoff_date = datetime.now() - timedelta(days=RETENTION_DAYS)
     
     try:
         # 1. Identify "old" records based on created_at schema
