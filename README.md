@@ -37,5 +37,7 @@ Contributions and feedback are more than welcomed.
 
 When contributing to this project or using it in any way, please do pay attention to: [LICENSE](https://github.com/shahLLL/Kube-Sales-DataLake/tree/main?tab=Apache-2.0-1-ov-file)
 
+For a deeper dive on this project, feel free to read [this](https://medium.com/@samiur1998/creating-a-data-lake-using-python-and-kubernetes-d21c51b11b77) article.
+
 ☕☕☕**CHEERS AND THANK YOU**☕☕☕
 
